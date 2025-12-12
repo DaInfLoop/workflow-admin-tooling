@@ -7,7 +7,7 @@ import * as config from "./config";
 
 const app = new BoltJS.App({
     signingSecret: process.env.SIGNING_SECRET,
-    token: process.env.APP_TOKEN
+    token: process.env.BOT_TOKEN
 });
 
 if (config.interactionImports.actions) {

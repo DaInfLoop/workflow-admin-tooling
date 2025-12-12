@@ -13,10 +13,10 @@ export const interactionImports = {
     events: true,
 
     // Slack functions are custom workflow steps.
-    functions: true,
+    functions: false,
 
     // Actions that you can invoke globally or on a message.
-    shortcuts: false,
+    shortcuts: true,
 
     // Submission of modals and app home views.
     views: true

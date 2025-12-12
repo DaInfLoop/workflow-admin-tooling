@@ -1,16 +1,16 @@
 {
-  "name": "boltjs-template",
+  "name": "workflow-admin-tooling",
   "version": "1.0.0",
   "private": true,
-  "description": "A basic and dynamic template for Bolt.js apps using Typescript and pnpm.",
+  "description": "Moderation tooling for Slack workflows.",
   "keywords": [],
-  "homepage": "https://github.com/DaInfLoop/boltjs-template#readme",
+  "homepage": "https://github.com/DaInfLoop/workflow-admin-tooling#readme",
   "bugs": {
-    "url": "https://github.com/DaInfLoop/boltjs-template/issues"
+    "url": "https://github.com/DaInfLoop/workflow-admin-tooling/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DaInfLoop/boltjs-template.git"
+    "url": "git+https://github.com/DaInfLoop/workflow-admin-tooling.git"
   },
   "license": "MIT",
   "author": "DaInfLoop <mail@dainfloop.is-a.dev>",
@@ -24,6 +24,7 @@
     "dotenv": "^16.5.0"
   },
   "devDependencies": {
+    "@ngrok/ngrok": "^1.6.1",
     "@types/node": "^22.15.24",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
