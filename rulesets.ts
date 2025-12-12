@@ -7,6 +7,13 @@ type Ruleset = {
 
 export default [
     {
+        // Why? Well, mostly because a lot of filters will use `Workflow#steps`, and not take into account the steps in each branch.
+        name: "Filter branching workflows",
+        run: (workflow) =>
+            workflow.steps!.some(step => step.function_id === StepFunctionIDs.switch_step)
+    },
+
+    {
         name: "Filter webhook triggers",
         run: (workflow) =>
             workflow.trigger_ids!.includes(TriggerTypeIDs["From a webhook"])
@@ -22,7 +29,7 @@ export default [
         name: "Filter list recursion attempts",
         run: (workflow) =>
             workflow.trigger_ids!.includes(TriggerTypeIDs["When a list item is updated"]) &&
-            workflow.steps!.some(step => step.function_id === StepFunctionIDs.update_list_record),
+            workflow.steps!.some(step => step.function_id === StepFunctionIDs.update_list_record)
     },
 
     {
