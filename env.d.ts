@@ -8,6 +8,9 @@ declare global {
             BOT_TOKEN: string;
             SIGNING_SECRET: string;
 
+            SLACK_COOKIE: string;
+            USER_TOKEN: string;
+
             // ngrok creds
             NGROK_TOKEN?: "NONE" | string;
             NGROK_DOMAIN?: string;
@@ -17,6 +20,11 @@ declare global {
             PG_USER: string;
             PG_DATABASE: string;
             PG_PASSWORD: string;
+
+            // Workspace-specific variables
+            ADMIN_USERGROUP_ID: string;
+            ADMIN_USER_ID: string;
+            ADMIN_REVIEW_CHANNEL: string;
         }
     }
 }
