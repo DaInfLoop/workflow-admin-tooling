@@ -47,7 +47,7 @@ export default [
 ] as Ruleset[];
 
 // Mapped enums for triggers + Slack built-in steps:
-enum TriggerTypeIDs {
+export enum TriggerTypeIDs {
     "From a link in Slack" = "Ftt0101",
     "On a schedule" = "Ftt0104",
     "When an emoji reaction is used" = "Ftt0102",
@@ -113,7 +113,7 @@ enum TriggerTypeIDs {
 
 const triggerTypeIds = Object.values(TriggerTypeIDs) as string[];
 
-enum StepFunctionIDs {
+export enum StepFunctionIDs {
     send_message = "Fn0102",
     update_channel_topic = "Fn0105",
     create_channel = "Fn0106",
