@@ -1,24 +1,26 @@
-import type { AdminWorkflowsSearchResponse, Workflow } from "@slack/web-api/dist/types/response/AdminWorkflowsSearchResponse";
+import type { AdminWorkflowsSearchResponse } from "@slack/web-api/dist/types/response/AdminWorkflowsSearchResponse";
 import type { AllMiddlewareArgs, SlackEventMiddlewareArgs, StringIndexed } from "@slack/bolt";
 import type { HomeView, PlainTextOption, SectionBlock } from "@slack/web-api";
 import { userTokenApiCall } from "../../utils";
 
 export async function generateAppHome(userId: string, {
     filters = {
-        search: undefined,
-        publish_state: undefined
+        search: '',
+        publish_state: 'all'
     },
     sort = "desc"
 }: {
     filters?: {
         search?: string,
-        publish_state: 'published' | 'unpublished' | undefined
+        publish_state: 'published' | 'unpublished' | 'all'
     },
     sort?: "asc" | "desc"
 }): Promise<HomeView> {
     const workflows: AdminWorkflowsSearchResponse | { ok: false, error: string } = await userTokenApiCall('admin.workflows.search', {
         collaborator_ids: [userId],
-        query: filters.search
+        query: filters.search,
+        publish_status: filters.publish_state,
+        limit: 50,
     }).catch(err => ({
         ok: false,
         error: err.toString()
