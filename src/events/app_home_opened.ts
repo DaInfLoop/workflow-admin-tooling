@@ -155,6 +155,10 @@ export async function generateAppHome(userId: string, {
 
     return {
         type: "home",
+        private_metadata: JSON.stringify({
+            filters,
+            sort
+        }),
         blocks: [
             {
                 type: "header",
@@ -194,14 +198,14 @@ export async function generateAppHome(userId: string, {
                         },
                         initial_option: (() => {
                             switch (filters.publish_state) {
-                                case undefined:
+                                case 'all':
                                     return {
                                         text: {
                                             type: "plain_text",
                                             text: "No filter",
                                             emoji: true
                                         },
-                                        value: "no-filter"
+                                        value: "all"
                                     }
 
                                 case 'published':
@@ -232,7 +236,7 @@ export async function generateAppHome(userId: string, {
                                     text: "No filter",
                                     emoji: true
                                 },
-                                value: "no-filter"
+                                value: "all"
                             },
                             {
                                 text: {
@@ -287,6 +291,15 @@ export async function generateAppHome(userId: string, {
                             }
                         ],
                         action_id: "sort"
+                    },
+                    {
+                        type: 'button',
+                        action_id: 'refresh-app-home',
+                        text: {
+                            type: 'plain_text',
+                            text: 'Refresh view'
+                        },
+                        style: 'primary'
                     }
                 ]
             },
@@ -325,6 +338,7 @@ export async function generateAppHome(userId: string, {
 // For proper type-checking + intellisense, replace "event_template" with the raw event name
 export default async function AppHomeOpened(ctx: SlackEventMiddlewareArgs<"app_home_opened"> & AllMiddlewareArgs<StringIndexed>) {
     if (ctx.payload.tab !== "home") return;
+    if (ctx.payload.view && ctx.payload.view.private_metadata) return; // Return if a view already exists: the user should refresh the app home
 
     return ctx.client.views.publish({
         user_id: ctx.payload.user,

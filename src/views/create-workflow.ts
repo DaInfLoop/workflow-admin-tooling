@@ -68,8 +68,6 @@ export default async function CreateWorkflowSubmit(ctx: SlackViewMiddlewareArgs<
     }
 
     await ctx.ack({ response_action: 'clear' });
-
-    console.log('created a workflow!', title, setTrigger.trigger.share_url)
     
     await ctx.client.chat.postMessage({
         channel: ctx.body.user.id,
