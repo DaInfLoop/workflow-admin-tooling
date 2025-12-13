@@ -6,6 +6,7 @@ declare global {
 
             // Slack creds
             BOT_TOKEN: string;
+            APP_TOKEN: "NONE" | string;
             SIGNING_SECRET: string;
 
             SLACK_COOKIE: string;
