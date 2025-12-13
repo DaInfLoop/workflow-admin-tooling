@@ -97,13 +97,13 @@ export async function generateAppHome(userId: string, {
         if (filters?.publish_state && (
             (filters.publish_state == "published" && !workflow.is_published) ||
             (filters.publish_state == "unpublished" && workflow.is_published)
-        )) continue;
+        ) || !workflow.trigger_ids?.length) continue;
 
         workflowBlocks.push({
             type: "section",
             text: {
                 type: "mrkdwn",
-                text: `*<https://slack.com/shortcuts/${workflow.trigger_ids![0]}|${workflow.title}>*\n${workflow.description}`
+                text: `*<https://slack.com/shortcuts/${workflow.trigger_ids![0]}|${workflow.title}>*${workflow.unpublished_change_count ? ` _(*${workflow.unpublished_change_count}* unpublished changes)_` : ''}${!workflow.is_published ? ' _(Unpublished)_' : ''}\n${workflow.description}`
             },
             accessory: {
                 type: "overflow",
@@ -118,10 +118,13 @@ export async function generateAppHome(userId: string, {
                                 },
                                 value: JSON.stringify({
                                     action: "unpublish",
+                                    workflowName: workflow.title,
                                     workflowId: workflow.id
                                 })
                             }
-                        ] as PlainTextOption[] :
+                        ] as PlainTextOption[] : []
+                    ),
+                    ...(workflow.unpublished_change_count ?
                         [
                             {
                                 text: {
@@ -131,10 +134,11 @@ export async function generateAppHome(userId: string, {
                                 },
                                 value: JSON.stringify({
                                     action: "publish",
+                                    workflowName: workflow.title,
                                     workflowId: workflow.id
                                 })
                             }
-                        ] as PlainTextOption[]
+                        ] as PlainTextOption[] : []
                     ),
                     {
                         text: {
@@ -144,6 +148,7 @@ export async function generateAppHome(userId: string, {
                         },
                         value: JSON.stringify({
                             action: "delete",
+                            workflowName: workflow.title,
                             workflowId: workflow.id
                         })
                     }
