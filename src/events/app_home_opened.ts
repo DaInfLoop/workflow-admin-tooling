@@ -91,7 +91,7 @@ export async function generateAppHome(userId: string, {
 
     const workflowBlocks: SectionBlock[] = [];
 
-    for (const workflow of workflows.workflows!) {
+    for (const workflow of sortedWorkflows) {
         if (filters?.publish_state && (
             (filters.publish_state == "published" && !workflow.is_published) ||
             (filters.publish_state == "unpublished" && workflow.is_published)
