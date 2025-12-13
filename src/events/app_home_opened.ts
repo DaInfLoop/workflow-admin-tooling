@@ -97,7 +97,6 @@ export async function generateAppHome(userId: string, {
             (filters.publish_state == "unpublished" && workflow.is_published)
         )) continue;
 
-        console.log(workflow.id)
         workflowBlocks.push({
             type: "section",
             text: {
@@ -294,11 +293,6 @@ export async function generateAppHome(userId: string, {
                 type: "input",
                 element: {
                     type: "plain_text_input",
-                    dispatch_action_config: {
-                        trigger_actions_on: [
-                            "on_character_entered"
-                        ]
-                    },
                     action_id: "search",
                     initial_value: filters.search
                 },
