@@ -2,7 +2,7 @@ import type { Workflow } from "@slack/web-api/dist/types/response/AdminWorkflows
 
 type Ruleset = {
     name: string,
-    run: (workflow: Workflow) => boolean
+    run: (workflow: Workflow & { trigger_types: { id: TriggerTypeIDs, type: 'shortcut' | 'webhook' | 'event', subtype?: string }[] }) => boolean
 }
 
 export default [
@@ -16,26 +16,26 @@ export default [
     {
         name: "Filter webhook triggers",
         run: (workflow) =>
-            workflow.trigger_ids!.includes(TriggerTypeIDs["From a webhook"])
+            workflow.trigger_types!.some(trigger => trigger.id == TriggerTypeIDs["From a webhook"])
     },
-    
+
     {
         name: "Filter keyword execution trigger",
         run: (workflow) =>
-            workflow.trigger_ids!.includes(TriggerTypeIDs["When a message is posted"])
+            workflow.trigger_types!.some(trigger => trigger.id == TriggerTypeIDs["When a message is posted"])
     },
 
     {
         name: "Filter list recursion attempts",
         run: (workflow) =>
-            workflow.trigger_ids!.includes(TriggerTypeIDs["When a list item is updated"]) &&
+            workflow.trigger_types!.some(trigger => trigger.id == TriggerTypeIDs["When a list item is updated"]) &&
             workflow.steps!.some(step => step.function_id === StepFunctionIDs.update_list_record)
     },
 
     {
         name: "Filter custom triggers",
         run: (workflow) =>
-            workflow.trigger_ids!.some(id => !triggerTypeIds.includes(id))
+            workflow.trigger_types!.some(trigger => !triggerTypeIds.includes(trigger.id))
     },
 
     {
