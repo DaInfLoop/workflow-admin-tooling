@@ -44,6 +44,29 @@ export default [
             workflow.steps!.some(step => !stepFunctionIds.includes(step.function_id!))
     },
 
+    {
+        name: "Filter channel creation via workflow",
+        run: (workflow) =>
+            workflow.steps!.some(step => step.function_id === StepFunctionIDs.create_channel)
+    },
+
+    {
+        name: "Filter List copying",
+        run: (workflow) =>
+            workflow.steps!.some(step => step.function_id === StepFunctionIDs.copy_list)
+    },
+
+    {
+        name: "Filter List notification steps",
+        run: (workflow) =>
+            workflow.steps!.some(step => [StepFunctionIDs.send_task_list_alert, StepFunctionIDs.lists_activity_feed].includes(step.function_id as StepFunctionIDs))
+    },
+
+    {
+        name: "Filter base step count",
+        run: (workflow) =>
+            workflow.steps!.length >= 15
+    }
 ] as Ruleset[];
 
 // Mapped enums for triggers + Slack built-in steps:
