@@ -2,7 +2,7 @@ import type { Workflow } from "@slack/web-api/dist/types/response/AdminWorkflows
 
 type Ruleset = {
     name: string,
-    run: (workflow: Workflow & { trigger_types: { id: TriggerTypeIDs, type: 'shortcut' | 'webhook' | 'event', subtype?: string }[] }) => boolean
+    run: (workflow: Workflow & { trigger_types: { id: TriggerTypeIDs, type: 'shortcut' | 'webhook' | 'scheduled' | 'event', subtype?: string }[] }) => boolean
 }
 
 export default [
