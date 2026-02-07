@@ -31,7 +31,8 @@ export default async function CreateWorkflowSubmit(ctx: SlackViewMiddlewareArgs<
         })
     }
 
-    const setTrigger = await userTokenApiCall('workflows.triggers.create', {
+    // I don't wanna do typinggggg
+    const setTrigger = await userTokenApiCall<any>('workflows.triggers.create', {
         type: 'shortcut',
         trigger_id: randomUUID(),
         inputs: {},

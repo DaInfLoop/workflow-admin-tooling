@@ -108,6 +108,18 @@ export async function generateAppHome(userId: string, {
             accessory: {
                 type: "overflow",
                 options: [
+                    {
+                        text: {
+                            type: 'plain_text',
+                            text: 'Edit workflow',
+                            emoji: true
+                        },
+                        value: JSON.stringify({
+                            action: "edit",
+                            workflowName: workflow.title,
+                            workflowId: workflow.id
+                        })
+                    },
                     ...(workflow.is_published ?
                         [
                             {

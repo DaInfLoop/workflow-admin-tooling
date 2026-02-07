@@ -7,7 +7,7 @@ import type { AdminWorkflowsSearchResponse } from "@slack/web-api";
 
 export default async function WorkflowManagement(ctx: SlackViewMiddlewareArgs<SlackViewAction> & AllMiddlewareArgs<StringIndexed>) {
     const data: {
-        action: 'unpublish' | 'publish' | 'delete',
+        action: 'edit' | 'unpublish' | 'publish' | 'delete',
         workflowName: string,
         workflowId: string
     } = JSON.parse(ctx.view.private_metadata)
@@ -98,6 +98,10 @@ export default async function WorkflowManagement(ctx: SlackViewMiddlewareArgs<Sl
     })} ON CONFLICT (id) DO NOTHING`;
 
     switch (data.action) {
+        case 'edit':
+            // TODO: implement new screen for workflow editing
+            break;
+
         case 'publish':
             sql`INSERT INTO audit ${sql({
                 workflow_id: data.workflowId,
@@ -349,7 +353,8 @@ export default async function WorkflowManagement(ctx: SlackViewMiddlewareArgs<Sl
                 return await ctx.ack({ response_action: 'clear' });
             }
 
-            const publishRes = await userTokenApiCall('functions.workflows.publish', {
+            // Later.
+            const publishRes = await userTokenApiCall<any>('functions.workflows.publish', {
                 workflow_id: data.workflowId
             })
 
@@ -412,7 +417,7 @@ export default async function WorkflowManagement(ctx: SlackViewMiddlewareArgs<Sl
                 // @ts-ignore it does exist :p
                 switch (workflow.trigger_types![0].type) {
                     case 'shortcut':
-                        return userTokenApiCall('workflows.triggers.update', {
+                        return userTokenApiCall<any>('workflows.triggers.update', {
                             type: 'shortcut',
                             trigger_id: workflow.trigger_ids![0],
                             inputs: inputParams,
@@ -432,6 +437,10 @@ export default async function WorkflowManagement(ctx: SlackViewMiddlewareArgs<Sl
                     case 'event':
                         // This would require vigorous testing, because I'm VERY sure this should need a trigger update. Not too sure though.
                         return { ok: true };
+
+                    // There. Are you happy, typescript-language-server?
+                    default:
+                        return { ok: false };
                 }
             })();
 
@@ -598,7 +607,7 @@ export default async function WorkflowManagement(ctx: SlackViewMiddlewareArgs<Sl
                 workflow_id: data.workflowId
             });
 
-            if (!unpublishRes.ok) {
+            if (!deleteRes.ok) {
                 return await ctx.ack({
                     response_action: 'update',
                     view: {

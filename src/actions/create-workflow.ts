@@ -1,8 +1,10 @@
 import type { AllMiddlewareArgs, BlockButtonAction, SlackActionMiddlewareArgs, StringIndexed } from "@slack/bolt";
-import { userTokenApiCall } from "../../utils";
+import { getTriggers } from "../../utils";
 
 export default async function CreateWorkflowButton(ctx: SlackActionMiddlewareArgs<BlockButtonAction> & AllMiddlewareArgs<StringIndexed>) {
     await ctx.ack();
+
+    const triggers = await getTriggers();
 
     ctx.client.views.open({
         trigger_id: ctx.body.trigger_id,
@@ -63,13 +65,29 @@ export default async function CreateWorkflowButton(ctx: SlackActionMiddlewareArg
                     optional: false
                 },
                 {
-                    type: 'context',
-                    elements: [
-                        {
-                            type: 'plain_text',
-                            text: 'Your workflow will be created with the "From a link in Slack" trigger. You can change the trigger used before publishing.\n\nYou can add an icon to the workflow and adjust permissions in the Workflow Builder.'
-                        }
-                    ]
+                    type: 'input',
+                    block_id: 'trigger',
+                    element: {
+                        type: 'static_select',
+                        option_groups: Object.values(triggers).map(group => ({
+                            label: {
+                                type: 'plain_text',
+                                text: group.name
+                            },
+                            options:
+                                group.triggers.map(trigger => ({
+                                    text: {
+                                        type: 'plain_text',
+                                        text: trigger.label
+                                    },
+                                    value: trigger.id
+                                }))
+                        }))
+                    },
+                    label: {
+                        type: 'plain_text',
+                        text: 'Workflow start trigger'
+                    }
                 }
             ]
         }
